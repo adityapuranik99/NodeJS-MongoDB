@@ -1,0 +1,25 @@
+{
+  "name": "node-farm",
+  "version": "1.0.0",
+  "description": "Learning NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adityapuranik99/NodeJS-MongoDB.git"
+  },
+  "author": "Aditya Puranik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adityapuranik99/NodeJS-MongoDB/issues"
+  },
+  "homepage": "https://github.com/adityapuranik99/NodeJS-MongoDB#readme",
+  "dependencies": {
+    "slugify": "^1.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.5"
+  }
+}
