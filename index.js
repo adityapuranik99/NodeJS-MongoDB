@@ -2,6 +2,8 @@ const fs = require('fs');
 const http = require('http');
 const url = require('url');
 
+
+const slugify = require('slugify');
 const replaceTemp = require('./modules/replaceTemplate');
 
 ////////////////////////////////////
@@ -42,6 +44,9 @@ const dataObj = JSON.parse(data);
 const tempOverview = fs.readFileSync(`./1-node-farm/starter/templates/template-overview.html`, 'utf-8');
 const tempProduct = fs.readFileSync(`./1-node-farm/starter/templates/template-product.html`, 'utf-8');
 const tempCard = fs.readFileSync(`./1-node-farm/starter/templates/template-card.html`, 'utf-8');
+
+const slugs = dataObj.map(el => slugify(el.productName, {lower : true}));
+// console.log(slugs);
 
 // Each time a new request function hits the server
 // this call back function would be called. 
