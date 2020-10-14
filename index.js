@@ -2,7 +2,6 @@ const fs = require('fs');
 const http = require('http');
 const url = require('url');
 
-
 const slugify = require('slugify');
 const replaceTemp = require('./modules/replaceTemplate');
 
@@ -38,53 +37,63 @@ const replaceTemp = require('./modules/replaceTemplate');
 ////////////////////////////////////
 // SERVER
 
-const data = fs.readFileSync(`./1-node-farm/starter/dev-data/data.json`, 'utf-8');
+const data = fs.readFileSync(
+  `./1-node-farm/starter/dev-data/data.json`,
+  'utf-8'
+);
 const dataObj = JSON.parse(data);
 
-const tempOverview = fs.readFileSync(`./1-node-farm/starter/templates/template-overview.html`, 'utf-8');
-const tempProduct = fs.readFileSync(`./1-node-farm/starter/templates/template-product.html`, 'utf-8');
-const tempCard = fs.readFileSync(`./1-node-farm/starter/templates/template-card.html`, 'utf-8');
+const tempOverview = fs.readFileSync(
+  `./1-node-farm/starter/templates/template-overview.html`,
+  'utf-8'
+);
+const tempProduct = fs.readFileSync(
+  `./1-node-farm/starter/templates/template-product.html`,
+  'utf-8'
+);
+const tempCard = fs.readFileSync(
+  `./1-node-farm/starter/templates/template-card.html`,
+  'utf-8'
+);
 
-const slugs = dataObj.map(el => slugify(el.productName, {lower : true}));
+const slugs = dataObj.map((el) => slugify(el.productName, { lower: true }));
 // console.log(slugs);
 
 // Each time a new request function hits the server
-// this call back function would be called. 
+// this call back function would be called.
 // res - gives us lots of tools to send out a respons
 // req - various information about request like URL etc.
 const server = http.createServer((req, res) => {
+  const { query, pathname } = url.parse(req.url, true);
 
-    const { query, pathname} = url.parse(req.url, true);
+  // Overview page
+  if (pathname === '/' || pathname === '/overview') {
+    res.writeHead(200, { 'Content-type': 'text/html' });
+    const cardsHtml = dataObj.map((ele) => replaceTemp(tempCard, ele)).join('');
+    const output = tempOverview.replace('{%PRODUCT_CARDS%}', cardsHtml);
 
-    // Overview page
-    if(pathname === '/' || pathname === '/overview'){
-        res.writeHead(200, {'Content-type': 'text/html'});
-        const cardsHtml = dataObj.map(ele => replaceTemp(tempCard, ele)).join('');
-        const output = tempOverview.replace('{%PRODUCT_CARDS%}', cardsHtml);
-        
-        res.end(output);
+    res.end(output);
 
     // Product Page
-    } else if (pathname === '/product') {
-        res.writeHead(200, {'Content-type': 'text/html'});
-        const product = dataObj[query.id];
-        const output = replaceTemp(tempProduct, product);
+  } else if (pathname === '/product') {
+    res.writeHead(200, { 'Content-type': 'text/html' });
+    const product = dataObj[query.id];
+    const output = replaceTemp(tempProduct, product);
 
-        res.end(output);
-
+    res.end(output);
 
     // API
-    } else if (pathname === '/api'){
-            res.writeHead(200, {'Content-type': 'application/json'});
-            res.end(data);
+  } else if (pathname === '/api') {
+    res.writeHead(200, { 'Content-type': 'application/json' });
+    res.end(data);
     // Not found
-    } else {
-        res.writeHead(404, {
-            'Content-type': 'text/html',
-            'my-own-header': 'hello-world'
-        });
-        res.end('<h1>This page cannot be found</h1>');
-    }
+  } else {
+    res.writeHead(404, {
+      'Content-type': 'text/html',
+      'my-own-header': 'hello-world',
+    });
+    res.end('<h1>This page cannot be found</h1>');
+  }
 });
 
 // listen takes a couple of parameters
@@ -92,6 +101,5 @@ const server = http.createServer((req, res) => {
 // second is host
 // third (optional) a call back function
 server.listen(8000, '127.0.0.1', () => {
-    console.log('Listening for a request on port 8000');
+  console.log('Listening for a request on port 8000');
 });
-
