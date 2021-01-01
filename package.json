@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/adityapuranik99/NodeJS-MongoDB#readme",
   "dependencies": {
+    "mongoose": "^5.10.15",
     "slugify": "^1.4.5"
   },
   "devDependencies": {
